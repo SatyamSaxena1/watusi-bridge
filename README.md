@@ -1,5 +1,7 @@
 WhatsApp Auto-Reply Bridge to LM Studio
 
+[![Build](https://github.com/SatyamSaxena1/watusi-bridge/actions/workflows/build.yml/badge.svg)](https://github.com/SatyamSaxena1/watusi-bridge/actions/workflows/build.yml)
+
 Overview
 - Python Flask webhook and Go single-binary alternative that accept Watusi Auto-Reply POSTs and reply via LM Studio’s OpenAI-compatible API.
 - Per-JID short memory with inactivity reset. Strong defaults for safe, on-topic replies. Admin page for live model/prompt changes.
