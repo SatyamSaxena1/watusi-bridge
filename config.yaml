@@ -1,0 +1,8 @@
+# Example config; override as needed
+host: 0.0.0.0
+port: 8001
+lm_studio_host: 127.0.0.1
+lm_studio_port: 1234
+inactivity_ttl_seconds: 600
+system_instructions: |
+  Be brief and directly answer the user’s question in 1 sentence. If unclear, ask 1 short clarifying question. Do not apologize, mention being an AI, or reference tools/policies. Plain text only.
