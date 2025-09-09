@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      - name: Build
+        shell: pwsh
+        run: |
+          go version
+          go env GOPATH GOMOD
+          go build -trimpath -ldflags "-s -w" -o watusi-bridge.exe .
+          Get-ChildItem -Force
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: watusi-bridge-windows
+          path: watusi-bridge.exe

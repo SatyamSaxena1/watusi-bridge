@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-windows:
+    name: Build and Release Windows binary
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          check-latest: true
+          cache: true
+
+      - name: Go env
+        shell: bash
+        run: |
+          go version
+          go env GOPATH GOMOD GOOS GOARCH
+
+      - name: Prepare dist folder
+        shell: bash
+        run: |
+          rm -rf dist
+          mkdir -p dist
+
+      - name: Build Windows exe
+        shell: bash
+        env:
+          GOOS: windows
+          GOARCH: amd64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o dist/watusi-bridge.exe .
+          ls -lah dist
+
+      - name: Upload build artifact (for debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: watusi-bridge-windows
+          path: dist/watusi-bridge.exe
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/watusi-bridge.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
